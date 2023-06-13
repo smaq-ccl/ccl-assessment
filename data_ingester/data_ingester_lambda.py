@@ -13,6 +13,8 @@ def lambda_handler(event, context):
     soup = BeautifulSoup(page.content, "xml")
     date = soup.Cube.Cube.get("time")
 
+    successes = 0
+    failures = 0
     for item in soup.Cube.Cube.contents:
         currency_item = {"date": date}
         if item != "\n":
@@ -22,7 +24,12 @@ def lambda_handler(event, context):
             response = table.put_item(Item=currency_item)
 
             status_code = response['ResponseMetadata']['HTTPStatusCode']
-            print(status_code)
+            if status_code == 200:
+                successes += 1
+            else:
+                failures += 1
+
+    print(f"Successes: {successes}, Failures: {failures}")
 
     return {
         'statusCode': status_code
