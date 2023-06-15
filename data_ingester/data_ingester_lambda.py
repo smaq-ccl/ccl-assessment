@@ -23,7 +23,7 @@ def lambda_handler(event, context):
 
             response = table.put_item(Item=currency_item)
 
-            status_code = response['ResponseMetadata']['HTTPStatusCode']
+            status_code = response["ResponseMetadata"]["HTTPStatusCode"]
             if status_code == 200:
                 successes += 1
             else:
@@ -31,6 +31,4 @@ def lambda_handler(event, context):
 
     print(f"Successes: {successes}, Failures: {failures}")
 
-    return {
-        'statusCode': status_code
-    }
+    return {"statusCode": status_code}
