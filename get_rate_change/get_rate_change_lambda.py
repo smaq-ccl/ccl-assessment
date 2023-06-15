@@ -1,3 +1,5 @@
+import json
+
 import boto3
 from boto3.dynamodb.conditions import Key
 
@@ -6,10 +8,13 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource("dynamodb")
     table = dynamodb.Table("ecb-currency-rates")
 
-    try:
-        ticker = event["currency"]
-    except:
-        ticker = None
+    ticker = event.get("currency")
+
+    event_body = event.get("body", "{}")
+    event_data = json.loads(event_body)
+
+    if event_data:
+        ticker = event_data.get("currency")
 
     if ticker:
         response = table.query(
